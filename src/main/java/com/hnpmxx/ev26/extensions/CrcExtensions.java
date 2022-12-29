@@ -52,7 +52,7 @@ public class CrcExtensions {
         int fcs = 0x0000ffff;
         int index = 0;
         while (length > 0) {
-            fcs = ((fcs >> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
+            fcs = ((fcs >>> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
             length--;
             index++;
         }
@@ -73,7 +73,7 @@ public class CrcExtensions {
         int fcs = 0x0000ffff;
         int index = 0;
         while (length > 0) {
-            fcs = ((fcs >> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
+            fcs = ((fcs >>> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
             length--;
             index++;
         }
@@ -92,7 +92,7 @@ public class CrcExtensions {
         int fcs = 0x0000ffff;
         int index = 0;
         while (length > 0) {
-            fcs = ((fcs >> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
+            fcs = ((fcs >>> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
             length--;
             index++;
         }
@@ -111,7 +111,7 @@ public class CrcExtensions {
         short fcs = (short) 0xffff;
         int index = 0;
         while (length > 0) {
-            fcs = (short) ((fcs >> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
+            fcs = (short) ((fcs >>> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
             length--;
             index++;
         }
@@ -153,7 +153,7 @@ public class CrcExtensions {
         int fcs = 0x0000ffff;
         int index = 0;
         while (length > 0) {
-            fcs = ((fcs >> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
+            fcs = ((fcs >>> 8) ^ Crctab16[(fcs ^ buffer[index]) & 0xff]);
             length--;
             index++;
         }
@@ -173,7 +173,7 @@ public class CrcExtensions {
     }
 
     public static short toCrc(byte[] buffer) {
-        return (short) ((buffer[0] << 8) + buffer[1]);
+        return (short) (((buffer[0] & 0xFF) << 8) | (buffer[1] & 0XFF));
     }
 
     public static void main(String[] args) {
@@ -192,6 +192,12 @@ public class CrcExtensions {
         short r_crc = CrcExtensions.GetCrc16(hex);
         short crc2 = CrcExtensions.GetCrc16ForPackage(hex);
 
+        int crc1_1 = CrcExtensions.toCrc(new byte[]{-13, -29});
+        int crc1_2 = CrcExtensions.toCrc(new byte[]{-115, -99});
+        short crc1_3 = CrcExtensions.GetCrc16ForPackage(hex);
+
+        byte crc1_2_1 = (byte) (crc1_2 >> 8);
+        byte crc1_2_2 = (byte) (crc1_2);
 
         short value = (short) 65536;
 
